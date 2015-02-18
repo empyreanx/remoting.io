@@ -74,6 +74,18 @@ describe('server', function () {
 		socket.emit('message', JSON.stringify(request));
 	});
 	
+	it('should return new instance error', function (done) {
+		var request = { id: 0, type: 'new', service: 'DoesNotExist' };
+		
+		socket.send = function (message) {
+			var error = JSON.parse(message);
+			expect(error.name).to.be('NewInstanceError');
+			done();
+		};
+		
+		socket.emit('message', JSON.stringify(request));
+	});
+	
 	it('should instantiate service', function (done) {
 		var request = { id: 0, type: 'new', service: 'TestService1' };
 		var response = { id: 0, type: 'new', instance: 0, exports: ['test1', 'test2'] };
@@ -95,6 +107,18 @@ describe('server', function () {
 			socket.emit('message', JSON.stringify(request));
 			
 			done();
+		});
+		
+		it('should return instance not found error', function (done) {
+			var request = { id: 0, type: 'call', instance: 42, method: 'test1', args: ['hi', 'there'] };
+			
+			socket.send = function (message) {
+				var error = JSON.parse(message);
+				expect(error.name).to.be('InstanceNotFound');
+				done();
+			};
+			
+			socket.emit('message', JSON.stringify(request));
 		});
 		
 		it('should call plain method', function (done) {
