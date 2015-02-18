@@ -121,6 +121,19 @@ describe('server', function () {
 			socket.emit('message', JSON.stringify(request));
 		});
 		
+		it('should return no such method', function (done) {
+			var request = { id: 0, type: 'call', instance: 0, method: 'doesnotexist' };
+			
+			socket.send = function (message) {
+				var error = JSON.parse(message);
+				expect(error.name).to.be('NoSuchMethod');
+				done();
+			};
+			
+			socket.emit('message', JSON.stringify(request));
+		});
+		
+		
 		it('should call plain method', function (done) {
 			var request = { id: 0, type: 'call', instance: 0, method: 'test1', args: ['hi', 'there'] };
 			var response = { id: 0, type: 'call', result: 'hithere' };
@@ -136,6 +149,24 @@ describe('server', function () {
 		it('should call promise method', function (done) {
 			var request = { id: 0, type: 'call', instance: 0, method: 'test2'};
 			var response = { id: 0, type: 'call', result: { email: 'test@example.com', password: 'secret' } };
+			
+			socket.send = function (message) {
+				expect(message).to.be(JSON.stringify(response));
+				done();
+			};
+			
+			socket.emit('message', JSON.stringify(request));
+		});
+		
+		it('should use values from constructor', function (done) {
+			var response, request = { id: 0, type: 'new', service: 'TestService2' };
+			
+			socket.send = function () { };
+			
+			socket.emit('message', JSON.stringify(request));
+			
+			request = { id: 0, type: 'call', instance: 1, method: 'test' };
+			response = { id: 0, type: 'call', result: 'hithere' };
 			
 			socket.send = function (message) {
 				expect(message).to.be(JSON.stringify(response));
