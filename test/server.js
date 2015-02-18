@@ -67,7 +67,7 @@ describe('server', function () {
 		var response = { id: 0, type: 'list', list: ['TestService1', 'TestService2']}; 
 		
 		socket.send = function (message) {
-			expect(message).to.be(JSON.stringify(response));
+			expect(JSON.parse(message)).to.eql(response);
 			done();
 		};
 		
@@ -78,8 +78,9 @@ describe('server', function () {
 		var request = { id: 0, type: 'new', service: 'DoesNotExist' };
 		
 		socket.send = function (message) {
-			var error = JSON.parse(message);
-			expect(error.name).to.be('NewInstanceError');
+			var response = JSON.parse(message);
+			expect(response.type).to.be('error');
+			expect(response.name).to.be('NewInstanceError');
 			done();
 		};
 		
@@ -91,7 +92,7 @@ describe('server', function () {
 		var response = { id: 0, type: 'new', instance: 0, exports: ['test1', 'test2'] };
 		
 		socket.send = function (message) {
-			expect(message).to.be(JSON.stringify(response));
+			expect(JSON.parse(message)).to.eql(response);
 			done();
 		};
 		
@@ -113,8 +114,9 @@ describe('server', function () {
 			var request = { id: 0, type: 'call', instance: 42, method: 'test1', args: ['hi', 'there'] };
 			
 			socket.send = function (message) {
-				var error = JSON.parse(message);
-				expect(error.name).to.be('InstanceNotFound');
+				var response = JSON.parse(message);
+				expect(response.type).to.be('error');
+				expect(response.name).to.be('InstanceNotFound');
 				done();
 			};
 			
@@ -125,8 +127,9 @@ describe('server', function () {
 			var request = { id: 0, type: 'call', instance: 0, method: 'doesnotexist' };
 			
 			socket.send = function (message) {
-				var error = JSON.parse(message);
-				expect(error.name).to.be('NoSuchMethod');
+				var response = JSON.parse(message);
+				expect(response.type).to.be('error');
+				expect(response.name).to.be('NoSuchMethod');
 				done();
 			};
 			
@@ -139,7 +142,7 @@ describe('server', function () {
 			var response = { id: 0, type: 'call', result: 'hithere' };
 			
 			socket.send = function (message) {
-				expect(message).to.be(JSON.stringify(response));
+				expect(JSON.parse(message)).to.eql(response);
 				done();
 			};
 			
@@ -151,7 +154,7 @@ describe('server', function () {
 			var response = { id: 0, type: 'call', result: { email: 'test@example.com', password: 'secret' } };
 			
 			socket.send = function (message) {
-				expect(message).to.be(JSON.stringify(response));
+				expect(JSON.parse(message)).to.eql(response);
 				done();
 			};
 			
@@ -169,7 +172,7 @@ describe('server', function () {
 			response = { id: 0, type: 'call', result: 'hithere' };
 			
 			socket.send = function (message) {
-				expect(message).to.be(JSON.stringify(response));
+				expect(JSON.parse(message)).to.eql(response);
 				done();
 			};
 			
