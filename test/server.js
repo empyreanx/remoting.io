@@ -62,6 +62,28 @@ describe('server', function () {
 		done();
 	});
 	
+	it('should send json parse error', function (done) {
+		socket.send = function (message) {
+			var response = JSON.parse(message);
+			expect(response.type).to.be('error');
+			expect(response.name).to.be('InvalidRequest');
+			done();
+		};
+		
+		socket.emit('message', "not json");
+	});
+	
+	it('should send unknown type error', function (done) {
+		socket.send = function (message) {
+			var response = JSON.parse(message);
+			expect(response.type).to.be('error');
+			expect(response.name).to.be('InvalidRequest');
+			done();
+		};
+		
+		socket.emit('message', JSON.stringify({ type: 'unknown' }));
+	});
+	
 	it('should send service list', function (done) {
 		var request = { id: 0, type: 'services' };
 		var response = { id: 0, type: 'services', services: ['TestService1', 'TestService2']}; 
