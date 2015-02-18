@@ -63,8 +63,20 @@ describe('server', function () {
 	});
 	
 	it('should send service list', function (done) {
-		var request = { id: 0, type: 'list' };
-		var response = { id: 0, type: 'list', list: ['TestService1', 'TestService2']}; 
+		var request = { id: 0, type: 'services' };
+		var response = { id: 0, type: 'services', services: ['TestService1', 'TestService2']}; 
+		
+		socket.send = function (message) {
+			expect(JSON.parse(message)).to.eql(response);
+			done();
+		};
+		
+		socket.emit('message', JSON.stringify(request));
+	});
+	
+	it('should send exports list', function (done) {
+		var request = { id: 0, type: 'exports', service: 'TestService1' };
+		var response = { id: 0, type: 'exports', exports: ['test1', 'test2']}; 
 		
 		socket.send = function (message) {
 			expect(JSON.parse(message)).to.eql(response);
@@ -95,6 +107,23 @@ describe('server', function () {
 			expect(JSON.parse(message)).to.eql(response);
 			done();
 		};
+		
+		socket.emit('message', JSON.stringify(request));
+	});
+	
+	it('should release service', function (done) {
+		var request = { id: 0, type: 'new', service: 'TestService1' };
+		socket.send = function () { };
+		socket.emit('message', JSON.stringify(request));
+		
+		var response = { id: 0, type: 'release' };
+		
+		socket.send = function (message) {
+			expect(JSON.parse(message)).to.eql(response);
+			done();
+		};
+		
+		request = { id: 0, type: 'release', instance: 0 };
 		
 		socket.emit('message', JSON.stringify(request));
 	});
@@ -135,7 +164,6 @@ describe('server', function () {
 			
 			socket.emit('message', JSON.stringify(request));
 		});
-		
 		
 		it('should call plain method', function (done) {
 			var request = { id: 0, type: 'call', instance: 0, method: 'test1', args: ['hi', 'there'] };
