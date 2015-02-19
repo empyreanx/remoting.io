@@ -40,9 +40,7 @@
   },
   "keywords": [],
   "dependencies": {
-    "engine.io": "~1.5.1",
     "heir": "~3.0.0",
-    "q": "~1.1.2",
     "promise": "~6.1.0"
   }
 }
