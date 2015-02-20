@@ -55,8 +55,8 @@ describe('server', function () {
 		socket = new MockSocket();
 		
 		server = remoting(socketServer);
-		server.remote('TestService1', TestService1);
-		server.remote('TestService2', TestService2, ['hi', 'there']);
+		server.addService('TestService1', TestService1);
+		server.addService('TestService2', TestService2, ['hi', 'there']);
 		
 		socketServer.emit('connection', socket);
 		
@@ -87,7 +87,7 @@ describe('server', function () {
 	
 	it('should send service list', function (done) {
 		var request = { id: 0, type: 'services' };
-		var response = { id: 0, type: 'services', services: ['TestService1', 'TestService2']}; 
+		var response = { id: 0, type: 'services', result: ['TestService1', 'TestService2']}; 
 		
 		socket.send = function (message) {
 			expect(JSON.parse(message)).to.eql(response);
@@ -99,7 +99,7 @@ describe('server', function () {
 	
 	it('should send exports list', function (done) {
 		var request = { id: 0, type: 'exports', service: 'TestService1' };
-		var response = { id: 0, type: 'exports', exports: ['test1', 'test2']}; 
+		var response = { id: 0, type: 'exports', result: ['test1', 'test2']}; 
 		
 		socket.send = function (message) {
 			expect(JSON.parse(message)).to.eql(response);
@@ -124,7 +124,7 @@ describe('server', function () {
 	
 	it('should instantiate service', function (done) {
 		var request = { id: 0, type: 'create', service: 'TestService1' };
-		var response = { id: 0, type: 'create', instance: 0, exports: ['test1', 'test2'] };
+		var response = { id: 0, type: 'create', result: { instance: 0, exports: ['test1', 'test2'] } };
 		
 		socket.send = function (message) {
 			expect(JSON.parse(message)).to.eql(response);
