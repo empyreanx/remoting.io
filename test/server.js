@@ -1,11 +1,12 @@
 'use strict';
 
+var Promise = require('promise');
+
 var events = require('events');
 var heir = require('heir');
 var expect = require('expect.js');
 
-var Promise = require('promise');
-var Server = require('../lib/server');
+var remoting = require('..');
 
 function MockSocketServer () {
 }
@@ -47,15 +48,15 @@ TestService2.prototype.test = function () {
 };
 
 describe('server', function () {
-	var socketServer, socket, remoting;
+	var socketServer, socket, server;
 	
 	beforeEach(function (done) {
 		socketServer = new MockSocketServer();
 		socket = new MockSocket();
 		
-		remoting = new Server(socketServer);
-		remoting.remote('TestService1', TestService1);
-		remoting.remote('TestService2', TestService2, ['hi', 'there']);
+		server = remoting(socketServer);
+		server.remote('TestService1', TestService1);
+		server.remote('TestService2', TestService2, ['hi', 'there']);
 		
 		socketServer.emit('connection', socket);
 		
@@ -109,7 +110,7 @@ describe('server', function () {
 	});
 	
 	it('should return new instance error', function (done) {
-		var request = { id: 0, type: 'new', service: 'DoesNotExist' };
+		var request = { id: 0, type: 'create', service: 'DoesNotExist' };
 		
 		socket.send = function (message) {
 			var response = JSON.parse(message);
@@ -122,8 +123,8 @@ describe('server', function () {
 	});
 	
 	it('should instantiate service', function (done) {
-		var request = { id: 0, type: 'new', service: 'TestService1' };
-		var response = { id: 0, type: 'new', instance: 0, exports: ['test1', 'test2'] };
+		var request = { id: 0, type: 'create', service: 'TestService1' };
+		var response = { id: 0, type: 'create', instance: 0, exports: ['test1', 'test2'] };
 		
 		socket.send = function (message) {
 			expect(JSON.parse(message)).to.eql(response);
@@ -134,7 +135,7 @@ describe('server', function () {
 	});
 	
 	it('should release service', function (done) {
-		var request = { id: 0, type: 'new', service: 'TestService1' };
+		var request = { id: 0, type: 'create', service: 'TestService1' };
 		socket.send = function () { };
 		socket.emit('message', JSON.stringify(request));
 		
@@ -152,7 +153,7 @@ describe('server', function () {
 	
 	describe('call', function () {
 		beforeEach(function (done) {
-			var request = { id: 0, type: 'new', service: 'TestService1' };
+			var request = { id: 0, type: 'create', service: 'TestService1' };
 			
 			socket.send = function () { };
 			
@@ -212,7 +213,7 @@ describe('server', function () {
 		});
 		
 		it('should use values from constructor', function (done) {
-			var response, request = { id: 0, type: 'new', service: 'TestService2' };
+			var response, request = { id: 0, type: 'create', service: 'TestService2' };
 			
 			socket.send = function () { };
 			
