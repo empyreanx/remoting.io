@@ -150,7 +150,7 @@ describe('server', function () {
 		socket.emit('message', JSON.stringify(request));
 	});
 	
-	describe('call', function () {
+	describe('invoke', function () {
 		beforeEach(function (done) {
 			var request = { id: 0, type: 'instance', service: 'TestService1' };
 			
@@ -162,7 +162,7 @@ describe('server', function () {
 		});
 		
 		it('should return instance not found error', function (done) {
-			var request = { id: 0, type: 'call', instance: 42, method: 'test1', args: ['hi', 'there'] };
+			var request = { id: 0, type: 'invoke', instance: 42, method: 'test1', args: ['hi', 'there'] };
 			
 			socket.send = function (message) {
 				var response = JSON.parse(message);
@@ -175,7 +175,7 @@ describe('server', function () {
 		});
 		
 		it('should return no such method', function (done) {
-			var request = { id: 0, type: 'call', instance: 0, method: 'doesnotexist' };
+			var request = { id: 0, type: 'invoke', instance: 0, method: 'doesnotexist' };
 			
 			socket.send = function (message) {
 				var response = JSON.parse(message);
@@ -188,8 +188,8 @@ describe('server', function () {
 		});
 		
 		it('should call plain method', function (done) {
-			var request = { id: 0, type: 'call', instance: 0, method: 'test1', args: ['hi', 'there'] };
-			var response = { id: 0, type: 'call', result: 'hithere' };
+			var request = { id: 0, type: 'invoke', instance: 0, method: 'test1', args: ['hi', 'there'] };
+			var response = { id: 0, type: 'invoke', result: 'hithere' };
 			
 			socket.send = function (message) {
 				expect(JSON.parse(message)).to.eql(response);
@@ -200,8 +200,8 @@ describe('server', function () {
 		});
 		
 		it('should call promise method', function (done) {
-			var request = { id: 0, type: 'call', instance: 0, method: 'test2'};
-			var response = { id: 0, type: 'call', result: { email: 'test@example.com', password: 'secret' } };
+			var request = { id: 0, type: 'invoke', instance: 0, method: 'test2'};
+			var response = { id: 0, type: 'invoke', result: { email: 'test@example.com', password: 'secret' } };
 			
 			socket.send = function (message) {
 				expect(JSON.parse(message)).to.eql(response);
@@ -218,8 +218,8 @@ describe('server', function () {
 			
 			socket.emit('message', JSON.stringify(request));
 			
-			request = { id: 0, type: 'call', instance: 1, method: 'test' };
-			response = { id: 0, type: 'call', result: 'hithere' };
+			request = { id: 0, type: 'invoke', instance: 1, method: 'test' };
+			response = { id: 0, type: 'invoke', result: 'hithere' };
 			
 			socket.send = function (message) {
 				expect(JSON.parse(message)).to.eql(response);
