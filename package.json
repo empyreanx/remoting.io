@@ -1,12 +1,11 @@
 {
   "name": "remoting.io",
-  "description": "Transparent and bidirectional remote procedure calls using Engine.IO.",
+  "description": "Simple and transparent remote procedure calls using Engine.IO.",
   "version": "0.1.0",
   "homepage": "http://remoting.io",
   "author": {
     "name": "James McLean",
-    "email": "james@mcleanlabs.com",
-    "url": "http://mcleanlabs.com"
+    "url": "http://remoting.io"
   },
   "repository": {
     "type": "git",
@@ -18,15 +17,12 @@
   "licenses": [
     {
       "type": "MIT",
-      "url": "git://github.com/jrimclean/blob/master/LICENSE-MIT"
+      "url": "git://github.com/jrimclean/blob/master/LICENSE.md"
     }
   ],
   "main": "index.js",
-  "engines": {
-    "node": ">= 0.8.0"
-  },
   "scripts": {
-    "test": "grunt nodeunit"
+    "test": "grunt test"
   },
   "devDependencies": {
     "grunt-contrib-jshint": "~0.6.4",
