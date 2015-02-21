@@ -1,9 +1,8 @@
 'use strict';
 
-var Promise = require('promise');
+var Promise = require('es6-promise').Promise;
 
-var events = require('events');
-var heir = require('heir');
+var emitter = require('component-emitter');
 var expect = require('expect.js');
 
 var remoting = require('..');
@@ -11,12 +10,12 @@ var remoting = require('..');
 function MockSocketServer () {
 }
 
-heir.mixin(MockSocketServer, events.EventEmitter.prototype);
+emitter(MockSocketServer.prototype);
 
 function MockSocket () {
 }
 
-heir.mixin(MockSocket, events.EventEmitter.prototype);
+emitter(MockSocket.prototype);
 
 function TestService1() {
 	this.session['user'] = { email: 'test@example.com', password: 'secret' };
