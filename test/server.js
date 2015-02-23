@@ -56,7 +56,7 @@ describe('server', function () {
 		server = remoting(socketServer);
 		server.addService('TestService1', TestService1);
 		server.addService('TestService2', TestService2, ['hi', 'there']);
-		
+		server.start();
 		socketServer.emit('connection', socket);
 		
 		done();
