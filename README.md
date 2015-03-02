@@ -2,6 +2,8 @@
 
 Simple and transparent remote procedure calls (RPC) using `Engine.IO`.
 
+The client repository is located [here](https://github.com/jrimclean/remoting.io-client).
+
 ## About
 
 `Remoting.IO` allows services to export methods remotely. Services are simply plain prototypical Javascript classes which define a number of methods that can be called remotely.
