@@ -28,10 +28,10 @@ TestService1.prototype.test1 = function (str1, str2) {
 };
 
 TestService1.prototype.test2 = function () {
-	var that = this;
+	var self = this;
 
 	return new Promise(function (resolve) {
-		resolve(that.session['user']);
+		resolve(self.session['user']);
 	});
 };
 

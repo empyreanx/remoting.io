@@ -1,7 +1,7 @@
 The MIT License (MIT)
 =====================
 
-Copyright © `<year>` `<copyright holders>`
+Copyright © `2015` `James McLean`
 
 Permission is hereby granted, free of charge, to any person
 obtaining a copy of this software and associated documentation
