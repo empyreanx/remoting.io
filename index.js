@@ -1,3 +1,3 @@
 'use strict';
 
-module.exports = require('./lib/remoting.io');
+module.exports = require('./lib');
