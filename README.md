@@ -20,7 +20,7 @@ Install `Engine.IO` and `Remoting.IO` with:
 	npm install engine.io
 	npm install remoting.io
 
-## Usage
+## Server Example
 
 Define a service as follows:
 
@@ -59,6 +59,38 @@ rpcServer.start();
 ```
 
 When a client connects and requests an instance of `TestService`, `'Hello'` and `'World!'` will be passed into `arg1` and `arg2` of the service constructor respectively.
+
+## Client Example
+
+Using the server example above, we can remotely request an instance of the service and call it's method as follows:
+
+```js
+var socket = eio('ws://localhost');
+var client = rio(socket);
+	
+client.proxy('TestService').then(function (testService) {
+	testService.test1('Hello', 'World!').then(function (result) {
+		console.log(result);
+		testService.release();
+	});	
+});
+```
+
+This example assumes that `engine.io.js` and `remoting.io.js` have been loaded into the DOM. 
+
+Using Browserify:
+
+```js
+var socket = require('engine.io-client')('ws://localhost');
+var client = require('remoting.io-client')(socket);
+	
+client.proxy('TestService').then(function (testService) {
+	testService.test1('Hello', 'World!').then(function (result) {
+		console.log(result);
+		testService.release();
+	});	
+});
+```
 
 ## API
 
