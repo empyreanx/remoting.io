@@ -1,11 +1,9 @@
 {
   "name": "remoting.io",
   "description": "Simple and transparent remote procedure calls (RPC) using Engine.IO",
-  "version": "0.1.1",
-  "homepage": "http://remoting.io",
+  "version": "0.1.2",
   "author": {
     "name": "James McLean",
-    "url": "http://remoting.io"
   },
   "repository": {
     "type": "git",
