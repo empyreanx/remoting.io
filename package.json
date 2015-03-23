@@ -3,7 +3,7 @@
   "description": "Simple and transparent remote procedure calls (RPC) using Engine.IO",
   "version": "0.1.2",
   "author": {
-    "name": "James McLean",
+    "name": "James McLean"
   },
   "repository": {
     "type": "git",
